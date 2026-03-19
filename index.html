@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,11 @@
     <!-- Firebase SDK v10.8.0 (Latest stable) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, set, push, remove, update, child, get, enableLogging } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, set, push, remove, update, child, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         
         // Make Firebase available globally
         window.firebaseApp = initializeApp;
-        window.firebaseDatabase = { getDatabase, ref, onValue, set, push, remove, update, child, get, enableLogging };
+        window.firebaseDatabase = { getDatabase, ref, onValue, set, push, remove, update, child, get };
     </script>
     <style>
         * {
@@ -36,51 +36,12 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        /* Pencil Sketch Background Styles */
-        #pencil-bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-
-        /* Paper Texture Overlay */
-        .paper-texture {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
-            opacity: 0.6;
-            pointer-events: none;
-            mix-blend-mode: multiply;
-        }
-
-        /* Vignette for depth */
-        .vignette {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, transparent 0%, rgba(15, 23, 42, 0.4) 100%);
-            pointer-events: none;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f0f0;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e293b 100%);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
 
         /* Intro Animation Overlay */
@@ -222,8 +183,8 @@
             letter-spacing: 2px;
             background: linear-gradient(135deg, #ffffff 0%, var(--primary-yellow) 100%);
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             position: relative;
             z-index: 1;
         }
@@ -277,20 +238,12 @@
             gap: 1rem;
             padding: 1.5rem;
             background: rgba(0,0,0,0.2);
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--glass-border);
             flex-wrap: wrap;
-        }
-
-        /* Fallback for browsers without backdrop-filter support */
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .nav-tabs {
-                background: rgba(0,0,0,0.85);
-            }
         }
 
         .nav-btn {
@@ -371,8 +324,8 @@
             font-weight: 800;
             background: linear-gradient(135deg, var(--primary-yellow) 0%, #fff 50%, var(--primary-yellow) 100%);
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: 1rem 0;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -415,16 +368,8 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             overflow: hidden;
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border: 2px solid var(--glass-border);
-        }
-
-        /* Fallback for glassmorphism */
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .podium-card {
-                background: rgba(30, 30, 30, 0.95);
-            }
         }
 
         .podium-card::before {
@@ -493,8 +438,8 @@
             font-weight: 800;
             background: linear-gradient(135deg, #fff 0%, var(--primary-yellow) 100%);
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .house-color-bar {
@@ -528,14 +473,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .house-card {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .house-card::before {
@@ -630,14 +568,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .captain-card {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .captain-card:hover {
@@ -679,14 +609,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .house-members {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .members-label {
@@ -735,14 +657,6 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--glass-border);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .events-table {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .events-table th, .events-table td {
@@ -797,14 +711,6 @@
             border: 2px solid var(--primary-yellow);
             border-radius: 20px;
             padding: 2rem;
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .admin-container {
-                background: rgba(30, 30, 30, 0.98);
-            }
         }
 
         .admin-header-row {
@@ -942,14 +848,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 1.5rem;
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .chart-container {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .chart-title {
@@ -1008,14 +907,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .sync-status {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .sync-indicator {
@@ -1077,14 +968,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            .firebase-status {
-                background: rgba(40, 40, 40, 0.95);
-            }
         }
 
         .firebase-indicator {
@@ -1134,13 +1017,6 @@
     </style>
 </head>
 <body>
-    <!-- Pencil Sketch Background Canvas -->
-    <canvas id="pencil-bg-canvas"></canvas>
-    <!-- Paper Texture Overlay -->
-    <div class="paper-texture"></div>
-    <!-- Vignette -->
-    <div class="vignette"></div>
-    
     <!-- Sequential Intro Animation -->
     <div class="intro-overlay" id="introOverlay">
         <div class="intro-stage" id="stage1">
@@ -1353,180 +1229,23 @@
 
     <script type="module">
         // ==========================================
-        // PENCIL SKETCH BACKGROUND ANIMATION
+        // FIREBASE CONFIGURATION - YOUR CONFIG HERE
         // ==========================================
 
-        const pencilCanvas = document.getElementById('pencil-bg-canvas');
-        const pCtx = pencilCanvas.getContext('2d');
-        let pencilWidth, pencilHeight;
-
-        // Crest Image URL
-        const crestUrl = "https://i.ibb.co/qYLXh5VS/cropped-cropped-348274236-797714101574488-511100890472602947-n-removebg-preview-1.png";
-        const crestImg = new Image();
-        crestImg.crossOrigin = "Anonymous";
-
-        // Particles for sketching effect
-        let particles = [];
-        let crestPathData = [];
-        let isDrawing = false;
-
-        function resizePencilCanvas() {
-            pencilWidth = window.innerWidth;
-            pencilHeight = window.innerHeight;
-            pencilCanvas.width = pencilWidth;
-            pencilCanvas.height = pencilHeight;
-            pCtx.lineCap = 'round';
-            pCtx.lineJoin = 'round';
-        }
-
-        window.addEventListener('resize', resizePencilCanvas);
-        resizePencilCanvas();
-
-        // Function to extract edges and create drawing path
-        function processCrestImage() {
-            try {
-                const tempCanvas = document.createElement('canvas');
-                const tCtx = tempCanvas.getContext('2d');
-                const size = Math.min(pencilWidth, pencilHeight) * 0.6;
-                tempCanvas.width = size;
-                tempCanvas.height = size;
-                
-                // Draw image centered
-                tCtx.drawImage(crestImg, 0, 0, size, size);
-                
-                // Get image data
-                const imageData = tCtx.getImageData(0, 0, size, size);
-                const data = imageData.data;
-                
-                // Create edge detection points
-                crestPathData = [];
-                const step = 3; // Sampling step
-                
-                for (let y = 0; y < size; y += step) {
-                    for (let x = 0; x < size; x += step) {
-                        const idx = (y * size + x) * 4;
-                        const alpha = data[idx + 3];
-                        
-                        if (alpha > 100) {
-                            // Add some randomness for pencil effect
-                            const offsetX = (Math.random() - 0.5) * 2;
-                            const offsetY = (Math.random() - 0.5) * 2;
-                            crestPathData.push({
-                                x: x + offsetX + (pencilWidth - size) / 2,
-                                y: y + offsetY + (pencilHeight - size) / 2,
-                                alpha: alpha / 255
-                            });
-                        }
-                    }
-                }
-                
-                // Shuffle for random drawing effect
-                crestPathData.sort(() => Math.random() - 0.5);
-                
-                // Start drawing animation
-                isDrawing = true;
-                animatePencil();
-            } catch (error) {
-                console.warn('Pencil sketch effect error:', error);
-            }
-        }
-
-        // Pencil drawing animation
-        function animatePencil() {
-            if (!isDrawing) return;
-            
-            // Clear with fade effect for trailing sketches
-            pCtx.fillStyle = 'rgba(240, 240, 240, 0.1)';
-            pCtx.fillRect(0, 0, pencilWidth, pencilHeight);
-            
-            // Draw random batch of points
-            const batchSize = 15;
-            for (let i = 0; i < batchSize; i++) {
-                if (crestPathData.length > 0) {
-                    const point = crestPathData.pop();
-                    
-                    // Pencil line style
-                    pCtx.beginPath();
-                    pCtx.moveTo(point.x, point.y);
-                    
-                    // Draw short random stroke for sketch effect
-                    const strokeLength = Math.random() * 10 + 5;
-                    const angle = Math.random() * Math.PI * 2;
-                    pCtx.lineTo(
-                        point.x + Math.cos(angle) * strokeLength,
-                        point.y + Math.sin(angle) * strokeLength
-                    );
-                    
-                    // Varying gray for pencil effect
-                    const gray = Math.floor(Math.random() * 100 + 50);
-                    pCtx.strokeStyle = `rgba(${gray}, ${gray}, ${gray}, ${0.1 + point.alpha * 0.3})`;
-                    pCtx.lineWidth = Math.random() * 1.5 + 0.5;
-                    pCtx.stroke();
-                    
-                    // Add cross-hatching occasionally
-                    if (Math.random() > 0.7) {
-                        pCtx.beginPath();
-                        pCtx.moveTo(point.x, point.y);
-                        pCtx.lineTo(
-                            point.x + Math.cos(angle + Math.PI/4) * strokeLength * 0.5,
-                            point.y + Math.sin(angle + Math.PI/4) * strokeLength * 0.5
-                        );
-                        pCtx.strokeStyle = `rgba(${gray}, ${gray}, ${gray}, 0.05)`;
-                        pCtx.stroke();
-                    }
-                }
-            }
-            
-            // Continue animation or restart
-            if (crestPathData.length > 0) {
-                requestAnimationFrame(animatePencil);
-            } else {
-                // Pause then restart
-                setTimeout(() => {
-                    // Refill path data
-                    processCrestImage();
-                }, 3000);
-            }
-        }
-
-        // Load crest and start animation
-        crestImg.onload = () => {
-            setTimeout(processCrestImage, 1000);
-        };
-        crestImg.onerror = () => {
-            console.warn('Failed to load crest image for pencil effect');
-        };
-        crestImg.src = crestUrl;
-        
-        // ==========================================
-        // FIREBASE CONFIGURATION - SECURITY WARNING
-        // ==========================================
-        // WARNING: In production, use environment variables 
-        // and restrict database rules properly!
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDqOjbCoYigq4TulCFeo1M_NZ4yxYleitg",
-            authDomain: "sportmeet2026.firebaseapp.com",
-            databaseURL: "https://sportmeet2026-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            projectId: "sportmeet2026",
-            storageBucket: "sportmeet2026.firebasestorage.app",
-            messagingSenderId: "588604738178",
-            appId: "1:588604738178:web:f44f9218339c287ac5c29b",
-            measurementId: "G-2PCMB96V68"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyDqOjbCoYigq4TulCFeo1M_NZ4yxYleitg",
+    authDomain: "sportmeet2026.firebaseapp.com",
+    databaseURL: "https://sportmeet2026-default-rtdb.asia-southeast1.firebasedatabase.app/", // YOUR ACTUAL DATABASE URL
+    projectId: "sportmeet2026",
+    storageBucket: "sportmeet2026.firebasestorage.app",
+    messagingSenderId: "588604738178",
+    appId: "1:588604738178:web:f44f9218339c287ac5c29b",
+    measurementId: "G-2PCMB96V68"
+};
 
         // Initialize Firebase
-        let app;
-        let db;
-        
-        try {
-            app = window.firebaseApp(firebaseConfig);
-            db = window.firebaseDatabase.getDatabase(app);
-            console.log('Firebase initialized successfully');
-        } catch (error) {
-            console.error('Firebase initialization failed:', error);
-            showNotification('⚠️ Database connection failed');
-        }
+        const app = window.firebaseApp(firebaseConfig);
+        const db = window.firebaseDatabase.getDatabase(app);
         
         // Global database reference
         window.db = db;
@@ -1589,81 +1308,58 @@
         let isAdmin = false;
         let charts = {};
         let currentHouseDetail = null;
-        let isOnline = false;
 
         // ==========================================
         // FIREBASE REALTIME LISTENERS
         // ==========================================
 
         function initFirebaseListeners() {
-            if (!db) {
-                console.error('Database not initialized');
-                return;
-            }
-
             // Listen for changes to each house
             Object.keys(houses).forEach(houseId => {
-                const houseRef = window.dbRef(db, `houses/${houseId}`);
+                const houseRef = window.dbRef(window.db, `houses/${houseId}`);
                 
                 window.dbOnValue(houseRef, (snapshot) => {
-                    try {
-                        const data = snapshot.val();
-                        if (data) {
-                            // Update local data
-                            houses[houseId].events = data.events || [];
-                            houses[houseId].total = data.total || 0;
-                            
-                            // Update UI
-                            updateAllDisplays();
-                            
-                            // Show notification if this is an update (not initial load)
-                            const indicator = document.getElementById('firebaseIndicator');
-                            if (indicator && indicator.classList.contains('connected')) {
-                                showSyncNotification(houseId);
-                            }
+                    const data = snapshot.val();
+                    if (data) {
+                        // Update local data
+                        houses[houseId].events = data.events || [];
+                        houses[houseId].total = data.total || 0;
+                        
+                        // Update UI
+                        updateAllDisplays();
+                        
+                        // Show notification if this is an update (not initial load)
+                        if (document.getElementById('firebaseIndicator').classList.contains('connected')) {
+                            showSyncNotification(houseId);
                         }
-                    } catch (error) {
-                        console.error(`Error processing data for ${houseId}:`, error);
                     }
-                }, (error) => {
-                    console.error(`Database read failed for ${houseId}:`, error);
-                    showNotification('⚠️ Sync error - working offline');
                 });
             });
 
             // Update connection status
-            const connectedRef = window.dbRef(db, '.info/connected');
+            const connectedRef = window.dbRef(window.db, '.info/connected');
             window.dbOnValue(connectedRef, (snap) => {
                 const indicator = document.getElementById('firebaseIndicator');
                 const text = document.getElementById('firebaseText');
                 const syncIndicator = document.getElementById('syncIndicator');
                 
                 if (snap.val() === true) {
-                    isOnline = true;
-                    if (indicator) indicator.classList.add('connected');
-                    if (text) text.textContent = '';
-                    if (syncIndicator) syncIndicator.style.background = '#22c55e';
-                    const syncText = document.getElementById('syncText');
-                    if (syncText) syncText.textContent = 'Live Sync Active';
+                    indicator.classList.add('connected');
+                    text.textContent = '';
+                    syncIndicator.style.background = '#22c55e';
+                    document.getElementById('syncText').textContent = 'Live Sync Active';
                 } else {
-                    isOnline = false;
-                    if (indicator) indicator.classList.remove('connected');
-                    if (text) text.textContent = '⚠️ Offline - Reconnecting...';
-                    if (syncIndicator) syncIndicator.style.background = '#ef4444';
-                    const syncText = document.getElementById('syncText');
-                    if (syncText) syncText.textContent = 'Offline Mode';
+                    indicator.classList.remove('connected');
+                    text.textContent = '⚠️ Offline - Reconnecting...';
+                    syncIndicator.style.background = '#ef4444';
+                    document.getElementById('syncText').textContent = 'Offline Mode';
                 }
             });
         }
 
         async function saveToFirebase() {
-            if (!db) {
-                showNotification('❌ Database not available');
-                return;
-            }
-
             const syncIndicator = document.getElementById('syncIndicator');
-            if (syncIndicator) syncIndicator.classList.add('syncing');
+            syncIndicator.classList.add('syncing');
             
             try {
                 const updates = {};
@@ -1675,23 +1371,21 @@
                     };
                 });
                 
-                await window.dbUpdate(window.dbRef(db, '/'), updates);
+                await window.dbUpdate(window.dbRef(window.db, '/'), updates);
                 showNotification('✅ Saved to Cloud');
             } catch (error) {
                 console.error('Error saving to Firebase:', error);
                 showNotification('❌ Error saving to cloud');
             } finally {
                 setTimeout(() => {
-                    if (syncIndicator) syncIndicator.classList.remove('syncing');
+                    syncIndicator.classList.remove('syncing');
                 }, 500);
             }
         }
 
         async function loadFromFirebase() {
-            if (!db) return false;
-            
             try {
-                const snapshot = await window.dbGet(window.dbRef(db, 'houses'));
+                const snapshot = await window.dbGet(window.dbRef(window.db, 'houses'));
                 const data = snapshot.val();
                 
                 if (data) {
@@ -1730,11 +1424,12 @@
         }
 
         function showSyncNotification(houseId) {
+            const house = houses[houseId];
             const indicator = document.getElementById('syncIndicator');
-            if (indicator) indicator.classList.add('syncing');
+            indicator.classList.add('syncing');
             
             setTimeout(() => {
-                if (indicator) indicator.classList.remove('syncing');
+                indicator.classList.remove('syncing');
             }, 1000);
         }
 
@@ -1745,12 +1440,10 @@
             if (currentHouseDetail) {
                 showHouseDetail(currentHouseDetail);
             }
-            const chartsSection = document.getElementById('charts');
-            if (chartsSection && chartsSection.classList.contains('active')) {
+            if (document.getElementById('charts').classList.contains('active')) {
                 initCharts();
             }
-            const adminPanel = document.getElementById('hiddenAdmin');
-            if (adminPanel && adminPanel.classList.contains('active')) {
+            if (document.getElementById('hiddenAdmin').classList.contains('active')) {
                 renderAdminList();
             }
         }
@@ -1759,27 +1452,20 @@
             const sorted = Object.entries(houses).sort((a, b) => b[1].total - a[1].total);
             const leader = sorted[0];
             
-            const leaderName = document.getElementById('leaderName');
-            const leaderScore = document.getElementById('leaderScore');
-            
-            if (!leaderName || !leaderScore) return;
-            
             if (leader[1].total === 0) {
-                leaderName.textContent = '--';
-                leaderName.style.color = 'var(--text-secondary)';
-                leaderScore.textContent = '0';
+                document.getElementById('leaderName').textContent = '--';
+                document.getElementById('leaderName').style.color = 'var(--text-secondary)';
+                document.getElementById('leaderScore').textContent = '0';
             } else {
-                leaderName.textContent = leader[1].name;
-                leaderName.style.color = leader[1].color;
-                leaderScore.textContent = leader[1].total;
+                document.getElementById('leaderName').textContent = leader[1].name;
+                document.getElementById('leaderName').style.color = leader[1].color;
+                document.getElementById('leaderScore').textContent = leader[1].total;
             }
         }
 
         function renderLeaderboard() {
             const sorted = Object.entries(houses).sort((a, b) => b[1].total - a[1].total);
             const podium = document.getElementById('podiumContainer');
-            
-            if (!podium) return;
             
             podium.innerHTML = '';
             
@@ -1805,8 +1491,6 @@
 
         function renderHouses() {
             const grid = document.getElementById('housesGrid');
-            if (!grid) return;
-            
             const sorted = Object.entries(houses).sort((a, b) => b[1].total - a[1].total);
             const maxScore = Math.max(...sorted.map(h => h[1].total));
             
@@ -1842,58 +1526,40 @@
         function showHouseDetail(houseId) {
             currentHouseDetail = houseId;
             const house = houses[houseId];
+            document.getElementById('detailHouseName').textContent = house.name;
+            document.getElementById('detailHouseName').style.color = house.color;
+            document.getElementById('detailTotal').textContent = house.total;
             
-            const detailHouseName = document.getElementById('detailHouseName');
-            const detailTotal = document.getElementById('detailTotal');
-            const membersCount = document.getElementById('membersCount');
-            const houseCaptainName = document.getElementById('houseCaptainName');
-            const houseCaptainImg = document.getElementById('houseCaptainImg');
-            const sportCaptainName = document.getElementById('sportCaptainName');
-            const sportCaptainImg = document.getElementById('sportCaptainImg');
-            const houseCaptainCard = document.getElementById('houseCaptainCard');
-            const sportCaptainCard = document.getElementById('sportCaptainCard');
+            document.getElementById('membersCount').textContent = house.members;
             
-            if (detailHouseName) {
-                detailHouseName.textContent = house.name;
-                detailHouseName.style.color = house.color;
-            }
-            if (detailTotal) detailTotal.textContent = house.total;
-            if (membersCount) membersCount.textContent = house.members;
+            document.getElementById('houseCaptainName').textContent = house.houseCaptain.name;
+            document.getElementById('houseCaptainImg').src = house.houseCaptain.img;
+            document.getElementById('houseCaptainImg').style.borderColor = house.color;
             
-            if (houseCaptainName) houseCaptainName.textContent = house.houseCaptain.name;
-            if (houseCaptainImg) {
-                houseCaptainImg.src = house.houseCaptain.img;
-                houseCaptainImg.style.borderColor = house.color;
-            }
+            document.getElementById('sportCaptainName').textContent = house.sportCaptain.name;
+            document.getElementById('sportCaptainImg').src = house.sportCaptain.img;
+            document.getElementById('sportCaptainImg').style.borderColor = house.color;
             
-            if (sportCaptainName) sportCaptainName.textContent = house.sportCaptain.name;
-            if (sportCaptainImg) {
-                sportCaptainImg.src = house.sportCaptain.img;
-                sportCaptainImg.style.borderColor = house.color;
-            }
-            
-            if (houseCaptainCard) houseCaptainCard.style.borderColor = house.color;
-            if (sportCaptainCard) sportCaptainCard.style.borderColor = house.color;
+            document.getElementById('houseCaptainCard').style.borderColor = house.color;
+            document.getElementById('sportCaptainCard').style.borderColor = house.color;
             
             const tbody = document.getElementById('detailTableBody');
-            if (tbody) {
-                tbody.innerHTML = '';
-                
-                if (house.events.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-secondary);">No events recorded yet</td></tr>';
-                } else {
-                    const sortedEvents = [...house.events].sort((a, b) => b.points - a.points);
-                    sortedEvents.forEach(event => {
-                        const percentage = house.total > 0 ? ((event.points / house.total) * 100).toFixed(1) : 0;
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${event.name}</td>
-                            <td><span class="score-badge">${event.points}</span></td>
-                            <td>${percentage}%</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                }
+            tbody.innerHTML = '';
+            
+            if (house.events.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-secondary);">No events recorded yet</td></tr>';
+            } else {
+                const sortedEvents = [...house.events].sort((a, b) => b.points - a.points);
+                sortedEvents.forEach(event => {
+                    const percentage = house.total > 0 ? ((event.points / house.total) * 100).toFixed(1) : 0;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${event.name}</td>
+                        <td><span class="score-badge">${event.points}</span></td>
+                        <td>${percentage}%</td>
+                    `;
+                    tbody.appendChild(row);
+                });
             }
             
             showSection('houseDetail');
