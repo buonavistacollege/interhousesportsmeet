@@ -1014,7 +1014,50 @@
         }
 
         .hidden { display: none !important; }
-    </style>
+    
+        /* Password Modal */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 5500;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .password-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .password-container {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-yellow);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(255,215,0,0.2);
+        }
+
+        .password-shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+</style>
+<base target="_blank">
 </head>
 <body>
     <!-- Sequential Intro Animation -->
@@ -1037,7 +1080,23 @@
     </div>
 
     <!-- Hidden Admin Panel (Accessible via secret key combination) -->
-    <div class="hidden-admin" id="hiddenAdmin">
+        <!-- Admin Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-container">
+            <h2 style="color: var(--primary-yellow); margin-bottom: 1.5rem; text-align: center;">🔐 Admin Access</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; text-align: center;">Enter password to access live score editor</p>
+            <div class="form-group">
+                <input type="password" class="form-control" id="adminPassword" placeholder="Enter password..." style="text-align: center; font-size: 1.1rem;">
+            </div>
+            <div id="passwordError" style="color: #ef4444; text-align: center; margin-bottom: 1rem; display: none;">❌ Incorrect password</div>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-primary" onclick="checkPassword()">Unlock</button>
+                <button class="btn btn-secondary" onclick="closePasswordModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+<div class="hidden-admin" id="hiddenAdmin">
         <div class="admin-container">
             <div class="admin-header-row">
                 <h2 class="admin-title">🔐 Live Score Editor</h2>
@@ -1734,9 +1793,44 @@ const firebaseConfig = {
         }
 
         window.openAdminPanel = function() {
-            document.getElementById('hiddenAdmin').classList.add('active');
-            renderAdminList();
+            document.getElementById('passwordModal').classList.add('active');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('adminPassword').focus();
         }
+
+        window.closePasswordModal = function() {
+            document.getElementById('passwordModal').classList.remove('active');
+        }
+
+        window.checkPassword = function() {
+            const password = document.getElementById('adminPassword').value;
+            const correctPassword = 'Buona2026!'; // Change this to your desired password
+
+            if (password === correctPassword) {
+                document.getElementById('passwordModal').classList.remove('active');
+                document.getElementById('hiddenAdmin').classList.add('active');
+                renderAdminList();
+                showNotification('✅ Admin access granted');
+            } else {
+                const errorDiv = document.getElementById('passwordError');
+                const modal = document.querySelector('.password-container');
+                errorDiv.style.display = 'block';
+                modal.classList.add('password-shake');
+                setTimeout(() => modal.classList.remove('password-shake'), 500);
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
 
         window.closeAdminPanel = function() {
             document.getElementById('hiddenAdmin').classList.remove('active');
@@ -1881,6 +1975,14 @@ const firebaseConfig = {
         // Secret Admin Access - Ctrl+Shift+A
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                e.preventDefault();
+                openAdminPanel();
+            }
+        });
+
+        // Also allow Shift+Alt+A as alternative
+        document.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.altKey && e.key === 'A') {
                 e.preventDefault();
                 openAdminPanel();
             }
